@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d8146e64-b8b2-4cc1-bf1f-cde70d8e63a4" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/ReferenceCode/文件介绍.md" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Demo/VideoTransport/Webcam_client.java" afterPath="$PROJECT_DIR$/src/main/java/Demo/VideoTransport/Webcam_client.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Demo/VideoTransport/Webcam_server.java" afterPath="$PROJECT_DIR$/src/main/java/Demo/VideoTransport/Webcam_server.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -43,11 +42,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Webcam_server.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Webcam_server.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/Demo/VideoTransport/Webcam_server.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="253">
-              <caret line="69" column="42" lean-forward="false" selection-start-line="69" selection-start-column="42" selection-end-line="69" selection-end-column="42" />
+            <state relative-caret-position="437">
+              <caret line="104" column="0" lean-forward="true" selection-start-line="104" selection-start-column="0" selection-end-line="104" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -55,11 +54,24 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="文件介绍.md" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/ReferenceCode/文件介绍.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor relative-caret-position="38">
+                <caret line="2" column="19" lean-forward="false" selection-start-line="2" selection-start-column="19" selection-end-line="2" selection-end-column="19" />
+                <folding />
+              </first_editor>
+              <second_editor />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="Webcam_client.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/Demo/VideoTransport/Webcam_client.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="353">
-              <caret line="94" column="42" lean-forward="true" selection-start-line="94" selection-start-column="42" selection-end-line="94" selection-end-column="42" />
+            <state relative-caret-position="375">
+              <caret line="95" column="0" lean-forward="true" selection-start-line="95" selection-start-column="0" selection-end-line="95" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -102,6 +114,7 @@
         <option value="$PROJECT_DIR$/src/main/java/Demo/文件简介.md" />
         <option value="$PROJECT_DIR$/src/main/java/Demo/VideoTransport/Webcam_client.java" />
         <option value="$PROJECT_DIR$/src/main/java/Demo/VideoTransport/Webcam_server.java" />
+        <option value="$PROJECT_DIR$/src/main/java/ReferenceCode/文件介绍.md" />
       </list>
     </option>
   </component>
@@ -289,7 +302,7 @@
       <recent name="E:\UPC_Dachuang\src\main\java" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.Webcam_client">
     <configuration default="false" name="Webcam_test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <option name="MAIN_CLASS_NAME" value="ReferenceCode.Webcam_test" />
@@ -753,8 +766,8 @@
     </list>
     <recent_temporary>
       <list size="4">
-        <item index="0" class="java.lang.String" itemvalue="Application.Webcam_server" />
-        <item index="1" class="java.lang.String" itemvalue="Application.Webcam_client" />
+        <item index="0" class="java.lang.String" itemvalue="Application.Webcam_client" />
+        <item index="1" class="java.lang.String" itemvalue="Application.Webcam_server" />
         <item index="2" class="java.lang.String" itemvalue="Application.Webcam_test" />
         <item index="3" class="java.lang.String" itemvalue="Application.CameraServer_webcom" />
       </list>
@@ -772,15 +785,15 @@
       <updated>1484117930712</updated>
       <workItem from="1484117934219" duration="2541000" />
       <workItem from="1484122587249" duration="1601000" />
-      <workItem from="1484125167226" duration="6129000" />
+      <workItem from="1484125167226" duration="6461000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="10271000" />
+    <option name="totallyTimeSpent" value="10603000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1096" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1096" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -936,8 +949,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Demo/VideoTransport/Webcam_client.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="353">
-          <caret line="94" column="42" lean-forward="true" selection-start-line="94" selection-start-column="42" selection-end-line="94" selection-end-column="42" />
+        <state relative-caret-position="375">
+          <caret line="95" column="0" lean-forward="true" selection-start-line="95" selection-start-column="0" selection-end-line="95" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -946,11 +959,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Demo/VideoTransport/Webcam_server.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="253">
-          <caret line="69" column="42" lean-forward="false" selection-start-line="69" selection-start-column="42" selection-end-line="69" selection-end-column="42" />
+        <state relative-caret-position="437">
+          <caret line="104" column="0" lean-forward="true" selection-start-line="104" selection-start-column="0" selection-end-line="104" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/ReferenceCode/文件介绍.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="38">
+            <caret line="2" column="19" lean-forward="false" selection-start-line="2" selection-start-column="19" selection-end-line="2" selection-end-column="19" />
+            <folding />
+          </first_editor>
+          <second_editor />
         </state>
       </provider>
     </entry>
