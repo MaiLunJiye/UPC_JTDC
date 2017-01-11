@@ -1,4 +1,4 @@
-package Demo;
+package Demo.VideoTransport;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

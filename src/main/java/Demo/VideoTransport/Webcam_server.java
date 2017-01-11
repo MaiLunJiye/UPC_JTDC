@@ -1,4 +1,4 @@
-package Demo;
+package Demo.VideoTransport;
 
 import com.github.sarxos.webcam.Webcam;
 
