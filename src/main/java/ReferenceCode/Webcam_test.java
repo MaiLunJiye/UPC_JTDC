@@ -1,3 +1,5 @@
+package ReferenceCode;
+
 import com.github.sarxos.webcam.Webcam;
 
 import javax.imageio.ImageIO;
