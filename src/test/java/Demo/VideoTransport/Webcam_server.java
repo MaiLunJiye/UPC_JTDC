@@ -41,7 +41,7 @@ public class Webcam_server {
     public Webcam_server(int port){
         webcam = Webcam.getDefault();
         try {
-            dso = new DatagramSocket(port);         //套接字绑定传入的端口
+            dso = new DatagramSocket(port);         //套接字绑定输出端口
         } catch (SocketException e) {
             e.printStackTrace();
         }
