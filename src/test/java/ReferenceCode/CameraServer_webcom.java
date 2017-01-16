@@ -53,7 +53,8 @@ public class CameraServer_webcom extends JPanel {
 
         w.setVisible(true);
 
-        while(true){
+        while(w.isDisplayable()){
+            //循环拍照 刷新
             cwb.grab();
             cwb.repaint();
             Thread.sleep(50);

@@ -14,6 +14,7 @@ public class Webcam_test {
         Webcam webcam = Webcam.getDefault();
         webcam.open();
         try {
+            //拍照存盘
             ImageIO.write(webcam.getImage(), "PNG", new File("hello-world.png"));
         } catch (IOException e) {
             e.printStackTrace();
