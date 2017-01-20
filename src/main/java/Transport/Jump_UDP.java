@@ -9,7 +9,7 @@ import java.nio.channels.DatagramChannel;
 /**
  * Created by root on 1/16/17.
  */
-public class Jump_UDP implements Transport_interface,Runnable{
+public class Jump_UDP implements Transport_interface, Runnable{
     static final int __MY_ADDR_ = 0;
     static final int __AIM_ADDR_ = 1;
     static final int __MAX_VALUE__ = 100000;
@@ -37,6 +37,7 @@ public class Jump_UDP implements Transport_interface,Runnable{
 
         try {
             datagramChannel = DatagramChannel.open();
+            datagramChannel.configureBlocking(false);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -57,6 +58,7 @@ public class Jump_UDP implements Transport_interface,Runnable{
         }
 
         int time = (int)System.currentTimeMillis();
+        System.out.println(time);
         value = (key + time/10) % __MAX_VALUE__;
 
         return (new InetSocketAddress(toip[value % myip.length], toport[value % myport.length] ));
@@ -64,7 +66,9 @@ public class Jump_UDP implements Transport_interface,Runnable{
 
     private void regetValue(){
         int time = (int)System.currentTimeMillis();
-        value = key + time/10;
+        System.out.println(time);
+        value = (key + time/10) % __MAX_VALUE__;
+        value = value < 0? -value : value;
     }
 
     public int writeData(ByteBuffer buffer) throws IOException {
@@ -92,13 +96,28 @@ public class Jump_UDP implements Transport_interface,Runnable{
             }
 
             try {
+                String now_myip = myip[value % myip.length];
+                int now_myport = myport[value % myport.length];
+                System.out.println(now_myip + now_myport);
                 datagramChannel.socket().bind(new InetSocketAddress( myip[value % myip.length], myport[value % myport.length] ));
-                datagramChannel.socket().connect(new InetSocketAddress( aimip[value % myip.length], myport[value % myport.length] ));
+                datagramChannel.connect(new InetSocketAddress( aimip[value % myip.length], myport[value % myport.length] ));
             } catch (SocketException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
 
         }
 
+    }
+
+    public void jump_stop(){
+        jumping_flag = false;
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        jump_stop();
     }
 }
