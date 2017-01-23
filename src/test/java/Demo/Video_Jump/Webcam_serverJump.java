@@ -69,7 +69,7 @@ public class Webcam_serverJump {
 
     public void start(){
         webcam.open();      //开启摄像头服务
-        new Thread(judp).start();   //开启跳变服务
+        judp.jump_open();   //开启跳变服务
     }
 
     public void sendImg() throws IOException {
