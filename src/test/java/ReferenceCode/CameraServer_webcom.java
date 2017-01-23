@@ -35,6 +35,10 @@ public class CameraServer_webcom extends JPanel {
         webcam.open();
     }
 
+    public boolean Close(){
+        return webcam.close();
+    }
+
     public void paint(Graphics g){
         super.paint(g);
         g.drawImage(image , 0, 0, image.getWidth()*2, image.getHeight()*2, null);
@@ -53,12 +57,13 @@ public class CameraServer_webcom extends JPanel {
 
         w.setVisible(true);
 
-        while(w.isDisplayable()){
+        while(true){
             //循环拍照 刷新
             cwb.grab();
             cwb.repaint();
             Thread.sleep(50);
         }
+
     }
 
 }

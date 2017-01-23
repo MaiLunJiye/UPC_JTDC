@@ -2,6 +2,7 @@ package Transport;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
@@ -10,24 +11,26 @@ import java.nio.channels.DatagramChannel;
  * Created by root on 1/16/17.
  */
 public class Jump_UDP implements Transport_interface, Runnable{
-    static final int __MY_ADDR_ = 0;
-    static final int __AIM_ADDR_ = 1;
-    static final int __MAX_VALUE__ = 100000;
+    //取得地址时候的参数 的 定义
+    static final int __MY_ADDR_ = 0;            //取得我的地址
+    static final int __AIM_ADDR_ = 1;           //取得目标地址
+    static final int __MAX_VALUE__ = 100000;    //跳变值的最大值（大于他就取模），放置溢出
 
-    private int value;
-    private boolean jumping_flag;
-    private Thread jumpThread;
+    //跳变相关
+    private boolean jumping_flag;       //跳变标志（用来控制跳变同步进程是否继续）
+    private Thread jumpThread;          //同步进程
 
 
-    private int key;
+    //同步相关
+    private int key;                //互相的秘钥
 
-    private String[] myip;
-    private int[] myport;
+    private String[] myip;          //我的地址集
+    private int[] myport;           //我的端口集
 
-    private String[] aimip;
-    private int[] aimport;
+    private String[] aimip;         //目标的地址集
+    private int[] aimport;          //目标的端口集
 
-    private DatagramChannel datagramChannel;
+    private DatagramChannel datagramChannel;        //通信用的UDP管道
 
     public Jump_UDP(int key, String[] myip, int[] myport, String[] aimip, int[] aimport) {
         this.key = key;
@@ -59,28 +62,27 @@ public class Jump_UDP implements Transport_interface, Runnable{
             return null;
         }
 
-        //通过时间计算跳边值
+        //通过时间计算跳变值
         int time = (int)System.currentTimeMillis();
-        System.out.println(time);
-        value = (key + time/10) % __MAX_VALUE__;
+        int value = (key + time/1000) % __MAX_VALUE__;
 
-        return (new InetSocketAddress(toip[value % myip.length], toport[value % myport.length] ));
+        value = value<0 ? -value:value;
+
+        System.out.println(value);
+
+        return (new InetSocketAddress(toip[value % toip.length],
+                                        toport[value % toport.length])
+                                    );
+
     }
 
-    //重新计算跳变值
-    private void regetValue(){
-        int time = (int)System.currentTimeMillis();
-        System.out.println(time);
-        value = (key + time/1000) % __MAX_VALUE__;
-        value = value < 0? -value : value;
-    }
 
     public int writeData(ByteBuffer buffer) throws IOException {
-        return datagramChannel.write(buffer);
+        return datagramChannel.send(buffer, getAddr(__AIM_ADDR_) );
     }
 
-    public int readData(ByteBuffer buffer) throws IOException {
-        return datagramChannel.write(buffer);
+    public SocketAddress readData(ByteBuffer buffer) throws IOException {
+        return datagramChannel.receive(buffer);
     }
 
     /**
@@ -88,36 +90,34 @@ public class Jump_UDP implements Transport_interface, Runnable{
      *      开启一个子线程，子线程负责连接的同步
      */
     public void run() {
-        regetValue();           //从新计算跳变值
-        int now = value;        //记录当前跳变值
+        InetSocketAddress nowAddr = getAddr(__MY_ADDR_);
+        InetSocketAddress currentAddr = nowAddr;
         jumping_flag = true;    //设置是否继续标志
-
-        //先取得第一次的 ip，port值
-        String now_myip = myip[value % myip.length];
-        int now_myport = myport[value % myport.length];
 
         while (jumping_flag) {  //一直做死循环
 
-            //每隔一段时间计算 从新计算跳变值，查看跳变值是否相等
-            while (now == value){
-                //如果相等了就等待一段时间，然后再次判断
+            //每隔一段时间计算 从新计算自己的地址，查看跳变值是否相等
+            while (nowAddr == (currentAddr = getAddr(__MY_ADDR_)) ){
+                //如果一样就让出cpu，下次获得cpu再搞
                 Thread.yield();     //让出cpu
-                regetValue();   //再次刷新
-            }
+                try {
+                    Thread.sleep(30);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
+            }
 
             try {
-                datagramChannel.socket().bind(new InetSocketAddress( myip[value % myip.length], myport[value % myport.length] ));
-                datagramChannel.connect(new InetSocketAddress( aimip[value % myip.length], myport[value % myport.length] ));
+                //更改自己目前监听状态
+                datagramChannel.socket().bind(currentAddr);
             } catch (SocketException e) {
                 e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
             }
+
+            nowAddr = currentAddr;      //刷新当前值
             Thread.yield();     //让出cpu
         }
-
-
     }
 
     public void jump_open() {

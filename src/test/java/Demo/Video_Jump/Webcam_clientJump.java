@@ -58,6 +58,15 @@ public class Webcam_clientJump extends JPanel{
 
     public void start(){
         judp.jump_open();
+
+        //新建一个画板，并且初始化
+        JFrame w = new JFrame();
+        w.setSize(500,700);
+
+        //把 wclient 添加到画板上面，并且让画板的属性设置成可见
+        w.add(this);
+        w.setVisible(true);
+
     }
 
     public void stop(){

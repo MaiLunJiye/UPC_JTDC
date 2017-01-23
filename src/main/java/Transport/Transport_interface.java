@@ -1,6 +1,7 @@
 package Transport;
 
 import java.io.IOException;
+import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 
 /**
@@ -8,5 +9,5 @@ import java.nio.ByteBuffer;
  */
 public interface Transport_interface {
     public int writeData(ByteBuffer buffer) throws IOException;
-    public int readData(ByteBuffer buffer) throws IOException;
+    public SocketAddress readData(ByteBuffer buffer) throws IOException;
 }

@@ -28,7 +28,7 @@ public class Webcam_server {
 
 
     //下面两个是构造函数，传入套接字的使用端口（没有时候就默认用 8888号端口）
-    public Webcam_server(){
+    public Webcam_server(int key, String[] myip, int[] myport, String[] aimip, int[] aimport){
 
         webcam = Webcam.getDefault();       //获取摄像头
         try {
