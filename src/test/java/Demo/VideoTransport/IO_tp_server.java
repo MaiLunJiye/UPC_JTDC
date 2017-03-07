@@ -20,7 +20,7 @@ import java.net.SocketException;
  *
  *
  */
-public class Webcam_server {
+public class IO_tp_server {
     BufferedImage bufferedImage;        //图像数据
     Webcam webcam;                      //摄像头
 
@@ -28,7 +28,7 @@ public class Webcam_server {
 
 
     //下面两个是构造函数，传入套接字的使用端口（没有时候就默认用 8888号端口）
-    public Webcam_server(int key, String[] myip, int[] myport, String[] aimip, int[] aimport){
+    public IO_tp_server(int key, String[] myip, int[] myport, String[] aimip, int[] aimport){
 
         webcam = Webcam.getDefault();       //获取摄像头
         try {
@@ -38,7 +38,7 @@ public class Webcam_server {
         }
     }
 
-    public Webcam_server(int port){
+    public IO_tp_server(int port){
         webcam = Webcam.getDefault();
         try {
             dso = new DatagramSocket(port);         //套接字绑定输出端口
@@ -81,7 +81,7 @@ public class Webcam_server {
     }
 
     public static void main(String[] args) {
-        Webcam_server server = new Webcam_server(8888);         //实例化一个server类
+        IO_tp_server server = new IO_tp_server(8888);         //实例化一个server类
         server.webcam_open();           //启动摄像头
 
         //设置传输地址

@@ -1,6 +1,5 @@
 package Demo.Video_Jump;
 
-import Demo.VideoTransport.Webcam_client;
 import Transport.Jump_UDP;
 
 import javax.imageio.ImageIO;

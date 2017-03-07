@@ -1,7 +1,7 @@
 package Demo.VideoConnect;
 
-import Demo.VideoTransport.Webcam_client;
-import Demo.VideoTransport.Webcam_server;
+import Demo.VideoTransport.IO_tp_client;
+import Demo.VideoTransport.IO_tp_server;
 
 import javax.swing.*;
 import java.net.InetSocketAddress;
@@ -11,14 +11,14 @@ import java.net.InetSocketAddress;
  *  这个好像是端口绑定失败了
  */
 public class VideoMC implements Runnable{
-    private Webcam_client wc;
-    private Webcam_server ws;
+    private IO_tp_client wc;
+    private IO_tp_server ws;
 
     private int tp_port=9999;
 
     public VideoMC(int inport,int outport){
-        wc = new Webcam_client(inport);
-        ws = new Webcam_server(outport);
+        wc = new IO_tp_client(inport);
+        ws = new IO_tp_server(outport);
 
         ws.webcam_open();
 

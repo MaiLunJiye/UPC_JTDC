@@ -1,10 +1,7 @@
 package Demo.Video_Jump;
 
-import Demo.VideoTransport.Webcam_client;
-import Demo.VideoTransport.Webcam_server;
 import Transport.Jump_UDP;
 import com.github.sarxos.webcam.Webcam;
-import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
