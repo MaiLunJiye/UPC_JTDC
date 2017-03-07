@@ -59,6 +59,9 @@ public class Webcam_client extends JPanel{
             dgs.receive(dp);            //接收 收到的数据
             ByteArrayInputStream in = new ByteArrayInputStream(bs);     //通过流处理，转化为数据流
             bufferedImage = ImageIO.read(in);       //通过ImageIO的read方法转化为 图像
+
+            //输出来源地址与 端口
+            System.out.println("souce is " + dp.getAddress().getHostAddress()+":" + dp.getPort());
         } catch (IOException e) {
             e.printStackTrace();
         }
