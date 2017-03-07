@@ -19,6 +19,13 @@ import java.net.SocketException;
  * 预先保存套接字, 跳变基于使用不同的套接字实现
  * 目前还没有考虑阻塞问题,内存占用问题
  */
+
+
+/**
+ * 思路:
+ * 预先创建一个套接字池, 然后通过不同时间选择选择不同的套接字进行通信实现跳边
+ */
+
 public class VideoServer {
     Webcam webcam;
     DatagramSocket datagramSockets[];
@@ -30,7 +37,7 @@ public class VideoServer {
         webcam = Webcam.getDefault();
         webcam.open();
         this.datagramSockets = datagramSockets;
-        jvalue = 0;
+        jvalue = 0;         //状态码
     }
 
     public boolean capture() {
@@ -44,7 +51,7 @@ public class VideoServer {
         }
 
         try{
-            ByteArrayOutputStream os = new ByteArrayOutputStream();     //必须新建,不然那数据有问题
+            ByteArrayOutputStream os = new ByteArrayOutputStream();     //必须新建,不然那数据越变越长
             ImageIO.write(bufferedImage, "PNG", os);
             byte[] image_buf = os.toByteArray();
 
@@ -52,7 +59,7 @@ public class VideoServer {
 
             System.out.println("send_dg: "+datagramSockets[jvalue].getLocalPort());
 
-            datagramSockets[jvalue].send(dpg);
+            datagramSockets[jvalue].send(dpg);      //根据状态码选择发送数据的socket
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -86,7 +93,5 @@ public class VideoServer {
             }
         }
     }
-
-
 
 }

@@ -15,9 +15,11 @@ import java.net.SocketException;
  *
  * 这个是客户端，接收来自服务端的数据，然后转化为可以输出的图像，接着输出到屏幕
  *
+ * 比较传统的一个客户端,只开放一个端口, 与 VideoServer 形成一个单跳边的服务对
+ *
  * 输出图像用到JPanel
  */
-public class Webcam_client extends JPanel{
+public class VideoClient extends JPanel{
     //这个类继承JPanel，所以可以渲染图像
 
     static int ByteLength = 60000;      //这个是用来接收数据的缓冲区大小，以后需要根据代码来改
@@ -28,7 +30,7 @@ public class Webcam_client extends JPanel{
     private DatagramPacket dp;          //封装了上面哪个 bs， 可以用来装载UDP收到的数据
 
     //构造函数，传入端口表示监听哪个端口数据，
-    public Webcam_client(){
+    public VideoClient(){
         try {
             dgs = new DatagramSocket(8889);     //默认监听8889端口
         } catch (SocketException e) {
@@ -37,7 +39,7 @@ public class Webcam_client extends JPanel{
         init();     //解决了端口问题，执行这个方法实现初始化
     }
 
-    public Webcam_client(int port){     //上面哪个的有参构造（参数就是监听的端口号）
+    public VideoClient(int port){     //上面哪个的有参构造（参数就是监听的端口号）
         try {
             dgs = new DatagramSocket(port);
         } catch (SocketException e) {
@@ -78,7 +80,7 @@ public class Webcam_client extends JPanel{
 
     public static void main(String[] args) {
         //先新建一个类，然后先获取一下图像，初始化一下bufferedImage
-        Webcam_client wclient = new Webcam_client(8889);
+        VideoClient wclient = new VideoClient(8889);
         wclient.getImage();
 
         //新建一个画板，并且初始化
