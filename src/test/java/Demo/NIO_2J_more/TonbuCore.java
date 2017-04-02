@@ -1,4 +1,4 @@
-package Demo.NIO_2Jump_More;
+package Demo.NIO_2J_more;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -41,12 +41,19 @@ public class TonbuCore implements Runnable {
         //同步值
         long tempKey =  Long.parseLong(key);
         while(true){
-            // 每秒变更10次
-            this.JumpValue =System.currentTimeMillis() /100 % 10000 + tempKey;
+            // 每秒变更
+            this.JumpValue = System.currentTimeMillis() /1000 % 10000 + tempKey;
             Thread.yield(); //让出cpu
         }
     }
 
+
+    public Thread start(){
+        Thread th = new Thread(this);
+        th.setPriority(3);
+        th.start();
+        return th;
+    }
 
 
     public int sendData(ByteBuffer data) {

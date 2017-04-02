@@ -1,4 +1,4 @@
-package Demo.NIO_2Jump_More;
+package Demo.NIO_2J_more;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 
@@ -64,43 +65,41 @@ public class NIO_more_Client extends JPanel{
     }
 
     public static void main(String[] args) {
-        int[] myports = {
-                7000,
-                7001,
-                7002,
-                7003,
-                7004,
-                7005,
-                7006,
-                7007,
-                7008,
-                7009,
-                7010,
-                7011,
-                7012,
-                7013,
-                7014,
-                7015
-        };
+        String ipAddr = "127.0.0.1";
+        int[] myports = { 7000, 7001, 7002, 7003, 7004, 7005, 7006, 7007, 7008, 7009, 7010, 7011, 7012, 7013, 7014, 7015 };
+        int[] aimports = { 8000, 8001, 8002, 8003, 8004, 8005, 8006, 8007, 8008, 8009, 8010, 8011, 8012, 8013, 8014, 8015 };
+        InetSocketAddress[] myAddr = new InetSocketAddress[myports.length];
+        InetSocketAddress[] aimAddr = new InetSocketAddress[aimports.length];
 
-        int[] aimports = {
-                8000,
-                8001,
-                8002,
-                8003,
-                8004,
-                8005,
-                8006,
-                8007,
-                8008,
-                8009,
-                8010,
-                8011,
-                8012,
-                8013,
-                8014,
-                8015
-        };
+        for(int i=0; i<myports.length; i++) {
+            myAddr[i] = new InetSocketAddress(ipAddr, myports[i]);
+        }
+
+        for(int i=0; i<aimports.length; i++) {
+            aimAddr[i] = new InetSocketAddress(ipAddr, aimports[i]);
+        }
+        NIO_more_Client client = new NIO_more_Client(new TonbuCore(myAddr, aimAddr, "3"));
+
+        //新建一个画板，并且初始化
+        JFrame w = new JFrame();
+        w.setSize(200,200);
+
+        //把 wclient 添加到画板上面，并且让画板的属性设置成可见
+        w.add(client);
+        w.setVisible(true);
+
+        while(true){
+            //循环
+            if ( client.getImage() != null );     //接收数据
+                        client.repaint();      //刷新画板
+
+            //休眠50毫秒
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 
 
     }
