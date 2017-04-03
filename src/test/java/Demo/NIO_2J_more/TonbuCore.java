@@ -11,25 +11,28 @@ import java.nio.channels.DatagramChannel;
  */
 public class TonbuCore implements Runnable {
     private InetSocketAddress[] mysocketaddrs;
+    private int myLeath;
+    private int otherLeath;
     private InetSocketAddress[] othersocketaddrs;
     private String key;
-    private long JumpValue;
+    private int JumpValue;
     private DatagramChannel[] mychannels;
 
     public TonbuCore(InetSocketAddress[] mysocketaddrs, InetSocketAddress[] othersocketaddrs, String key) {
         this.mysocketaddrs = mysocketaddrs;
         this.othersocketaddrs = othersocketaddrs;
+        this.myLeath = mysocketaddrs.length;
+        this.otherLeath = othersocketaddrs.length;
         this.key = key;
+
+        this.mychannels = new DatagramChannel[mysocketaddrs.length];
 
         try {
             for( int i = 0; i<mysocketaddrs.length; i++){
                 DatagramChannel tempChannel = DatagramChannel.open();
+                tempChannel.configureBlocking(false);
                 tempChannel.socket().bind(mysocketaddrs[i]);
-            }
-
-            for( int i = 0; i<othersocketaddrs.length; i++){
-                DatagramChannel tempChannel = DatagramChannel.open();
-                tempChannel.socket().bind(othersocketaddrs[i]);
+                mychannels[i] = tempChannel;
             }
 
         } catch (IOException e) {
@@ -42,7 +45,7 @@ public class TonbuCore implements Runnable {
         long tempKey =  Long.parseLong(key);
         while(true){
             // 每秒变更
-            this.JumpValue = System.currentTimeMillis() /1000 % 10000 + tempKey;
+            this.JumpValue = (int) (System.currentTimeMillis() /100 % 10000 + tempKey);
             Thread.yield(); //让出cpu
         }
     }
@@ -57,26 +60,35 @@ public class TonbuCore implements Runnable {
 
 
     public int sendData(ByteBuffer data) {
-        data.flip();
+        // 这里不能 data.flip() 不然数据就会被清理掉
+        int ret = 0;
         try {
-            return mychannels[(int) (JumpValue % mychannels.length)]
+            int mytemp = JumpValue % myLeath;
+            int othertemp = JumpValue % otherLeath;
+            System.out.println(JumpValue % myLeath);
+            ret = mychannels[mytemp]
                     .send(
                             data,
-                            othersocketaddrs[(int) (JumpValue % othersocketaddrs.length)]
+                            othersocketaddrs[othertemp]
                     );
+            System.out.println("toport>>>" + othersocketaddrs[othertemp].getPort());
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return 0;
+        return ret;
     }
 
     public SocketAddress getData(ByteBuffer data) {
         data.clear();
+        SocketAddress ret = null;
         try {
-            return mychannels[(int) (JumpValue % mychannels.length)] .receive( data );
+            System.out.println(JumpValue % myLeath);
+            int mytemp = JumpValue % myLeath;
+            ret = mychannels[mytemp].receive( data );
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
+        return ret;
     }
+
 }

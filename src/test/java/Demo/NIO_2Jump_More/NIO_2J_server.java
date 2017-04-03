@@ -1,7 +1,6 @@
 package Demo.NIO_2Jump_More;
 
 import com.github.sarxos.webcam.Webcam;
-import com.sun.jna.Structure;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

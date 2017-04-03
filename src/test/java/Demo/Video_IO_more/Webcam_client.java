@@ -1,4 +1,4 @@
-package Demo.NIO_2J_more;
+package Demo.Video_IO_more;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -6,103 +6,103 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.SocketAddress;
-import java.nio.ByteBuffer;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.SocketException;
 
 /**
  * Created by 15070 on 2017/1/11.
  *
  * 这个是客户端，接收来自服务端的数据，然后转化为可以输出的图像，接着输出到屏幕
  *
- *
  * 输出图像用到JPanel
  */
-public class NIO_more_Client extends JPanel{
+public class Webcam_client extends JPanel{
     //这个类继承JPanel，所以可以渲染图像
 
     static int ByteLength = 60000;      //这个是用来接收数据的缓冲区大小，以后需要根据代码来改
-    TonbuCore tonbuCore;
+    private DatagramSocket dgs;         //UDP套接字
     private BufferedImage bufferedImage;    //用来装 转换后的图像
 
     private byte[] bs;                  //用来接收数据的缓冲区
-    private ByteBuffer byteBuffer;      //也是缓冲区
+    private DatagramPacket dp;          //封装了上面哪个 bs， 可以用来装载UDP收到的数据
 
+    //构造函数，传入端口表示监听哪个端口数据，
+    public Webcam_client(){
+        try {
+            dgs = new DatagramSocket(8889);     //默认监听8889端口
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
+        init();     //解决了端口问题，执行这个方法实现初始化
+    }
+
+    public Webcam_client(int port){     //上面哪个的有参构造（参数就是监听的端口号）
+        try {
+            dgs = new DatagramSocket(port);
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
+
+        init();
+    }
 
     //初始化设置，把缓冲区设置好
-    private NIO_more_Client(TonbuCore tonbuCore){
-        this.tonbuCore = tonbuCore;
+    private void init(){
         bs = new byte[2*ByteLength];        //申请一个字节数组，长度是 2 * 预先设置好的缓冲区长度
-        byteBuffer = ByteBuffer.wrap(bs);
+        dp = new DatagramPacket(bs, bs.length);     //把bs封装成 UDP数据包类
     }
 
 
     public BufferedImage getImage(){        //接收UDP数据，然后转化为图像保存在bufferedImage
         try {
-            byteBuffer.clear();
-            SocketAddress rec = tonbuCore.getData(byteBuffer);            //接收 收到的数据
-
-            if (rec == null) return null;
-            byteBuffer.flip();
+            dgs.receive(dp);            //接收 收到的数据
             ByteArrayInputStream in = new ByteArrayInputStream(bs);     //通过流处理，转化为数据流
             bufferedImage = ImageIO.read(in);       //通过ImageIO的read方法转化为 图像
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return bufferedImage;
+            return bufferedImage;
     }
 
     public void paint(Graphics g)       //绘制函数
     {
         super.paint(g);
-        System.out.println("paint ing .......");
-        if(bufferedImage == null) return;
 
         //把bufferedImage绘制出来
         g.drawImage(bufferedImage,0,0,
-                bufferedImage.getWidth(),
-                bufferedImage.getHeight(),
+                    bufferedImage.getWidth(),
+                    bufferedImage.getHeight(),
                 null);
-
-        System.out.println("paint finish");
     }
 
     public static void main(String[] args) {
-        String ipAddr = "127.0.0.1";
-        int[] myports = { 7000, 7001, 7002, 7003, 7004, 7005, 7006, 7007, 7008, 7009, 7010, 7011, 7012, 7013, 7014, 7015 };
-        int[] aimports = { 8000, 8001, 8002, 8003, 8004, 8005, 8006, 8007, 8008, 8009, 8010, 8011, 8012, 8013, 8014, 8015 };
-        InetSocketAddress[] myAddr = new InetSocketAddress[myports.length];
-        InetSocketAddress[] aimAddr = new InetSocketAddress[aimports.length];
-
-        for(int i=0; i<myports.length; i++) {
-            myAddr[i] = new InetSocketAddress(ipAddr, myports[i]);
-        }
-
-        for(int i=0; i<aimports.length; i++) {
-            aimAddr[i] = new InetSocketAddress(ipAddr, aimports[i]);
-        }
-        NIO_more_Client client = new NIO_more_Client(new TonbuCore(myAddr, aimAddr, "3"));
-        client.tonbuCore.start();
+        //先新建一个类，然后先获取一下图像，初始化一下bufferedImage
+        Webcam_client wclient = new Webcam_client(8889);
+        wclient.getImage();
 
         //新建一个画板，并且初始化
         JFrame w = new JFrame();
-        w.setSize(200,200);
+        w.setSize(wclient.getImage().getWidth(), wclient.getImage().getHeight());
 
         //把 wclient 添加到画板上面，并且让画板的属性设置成可见
-        w.add(client);
+        w.add(wclient);
         w.setVisible(true);
 
         while(true){
             //循环
-            client.getImage() ;     //接收数据
-            client.repaint();      //刷新画板
+            wclient.getImage();     //接收数据
+            wclient.repaint();      //刷新画板
 
             //休眠50毫秒
             try {
-                Thread.sleep(10);
+                Thread.sleep(50);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
     }
+
+
+
 }

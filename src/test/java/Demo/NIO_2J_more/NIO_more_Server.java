@@ -33,13 +33,12 @@ public class NIO_more_Server {
     }
 
     public void sendImage(){
+        ByteArrayOutputStream os = new ByteArrayOutputStream();     //必须新建,不然那数据越变越长
         try{
-            ByteArrayOutputStream os = new ByteArrayOutputStream();     //必须新建,不然那数据越变越长
             ImageIO.write(bufferedImage, "PNG", os);
             byte[] image_buf = os.toByteArray();
             ByteBuffer byteBuffer = ByteBuffer.wrap(image_buf);
             tonbuCore.sendData(byteBuffer);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
