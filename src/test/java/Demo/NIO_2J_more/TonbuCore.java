@@ -45,7 +45,7 @@ public class TonbuCore implements Runnable {
         long tempKey =  Long.parseLong(key);
         while(true){
             // 每秒变更
-            this.JumpValue = (int) (System.currentTimeMillis() /100 % 10000 + tempKey);
+            this.JumpValue = (int) (System.currentTimeMillis() /10 % 10000 + tempKey);
             Thread.yield(); //让出cpu
         }
     }
@@ -65,7 +65,6 @@ public class TonbuCore implements Runnable {
         try {
             int mytemp = JumpValue % myLeath;
             int othertemp = JumpValue % otherLeath;
-            System.out.println(JumpValue % myLeath);
             ret = mychannels[mytemp]
                     .send(
                             data,
@@ -82,7 +81,6 @@ public class TonbuCore implements Runnable {
         data.clear();
         SocketAddress ret = null;
         try {
-            System.out.println(JumpValue % myLeath);
             int mytemp = JumpValue % myLeath;
             ret = mychannels[mytemp].receive( data );
         } catch (IOException e) {

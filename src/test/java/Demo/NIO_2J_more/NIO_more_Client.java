@@ -40,7 +40,11 @@ public class NIO_more_Client extends JPanel{
     public BufferedImage getImage(){        //接收UDP数据，然后转化为图像保存在bufferedImage
         try {
             byteBuffer.clear();
-            SocketAddress rec = tonbuCore.getData(byteBuffer);            //接收 收到的数据
+            InetSocketAddress rec = (InetSocketAddress) tonbuCore.getData(byteBuffer);            //接收 收到的数据
+            // 来源输出
+            if(rec!=null) {
+                System.out.println("from : " + rec.toString());
+            }
 
             if (rec == null) return null;
             byteBuffer.flip();
@@ -55,7 +59,6 @@ public class NIO_more_Client extends JPanel{
     public void paint(Graphics g)       //绘制函数
     {
         super.paint(g);
-        System.out.println("paint ing .......");
         if(bufferedImage == null) return;
 
         //把bufferedImage绘制出来
@@ -63,23 +66,22 @@ public class NIO_more_Client extends JPanel{
                 bufferedImage.getWidth(),
                 bufferedImage.getHeight(),
                 null);
-
-        System.out.println("paint finish");
     }
 
     public static void main(String[] args) {
-        String ipAddr = "127.0.0.1";
+        String otherip = "192.168.31.21";
+        String myip = "192.168.31.227";
         int[] myports = { 7000, 7001, 7002, 7003, 7004, 7005, 7006, 7007, 7008, 7009, 7010, 7011, 7012, 7013, 7014, 7015 };
         int[] aimports = { 8000, 8001, 8002, 8003, 8004, 8005, 8006, 8007, 8008, 8009, 8010, 8011, 8012, 8013, 8014, 8015 };
         InetSocketAddress[] myAddr = new InetSocketAddress[myports.length];
         InetSocketAddress[] aimAddr = new InetSocketAddress[aimports.length];
 
         for(int i=0; i<myports.length; i++) {
-            myAddr[i] = new InetSocketAddress(ipAddr, myports[i]);
+            myAddr[i] = new InetSocketAddress(myip, myports[i]);
         }
 
         for(int i=0; i<aimports.length; i++) {
-            aimAddr[i] = new InetSocketAddress(ipAddr, aimports[i]);
+            aimAddr[i] = new InetSocketAddress(otherip, aimports[i]);
         }
         NIO_more_Client client = new NIO_more_Client(new TonbuCore(myAddr, aimAddr, "3"));
         client.tonbuCore.start();
