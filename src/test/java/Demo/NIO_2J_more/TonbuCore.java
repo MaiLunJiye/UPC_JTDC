@@ -17,6 +17,8 @@ public class TonbuCore implements Runnable {
     private String key;
     private int JumpValue;
     private DatagramChannel[] mychannels;
+    private Thread tongbu;
+    private boolean isclose;
 
     public TonbuCore(InetSocketAddress[] mysocketaddrs, InetSocketAddress[] othersocketaddrs, String key) {
         this.mysocketaddrs = mysocketaddrs;
@@ -24,6 +26,8 @@ public class TonbuCore implements Runnable {
         this.myLeath = mysocketaddrs.length;
         this.otherLeath = othersocketaddrs.length;
         this.key = key;
+
+        this.isclose = false;
 
         this.mychannels = new DatagramChannel[mysocketaddrs.length];
 
@@ -43,19 +47,24 @@ public class TonbuCore implements Runnable {
     public void run() {
         //同步值
         long tempKey =  Long.parseLong(key);
-        while(true){
+        while(!isclose){
             // 每秒变更
-            this.JumpValue = (int) (System.currentTimeMillis() /10 % 10000 + tempKey);
+            this.JumpValue = (int) (System.currentTimeMillis() % 10000 + tempKey);
             Thread.yield(); //让出cpu
         }
     }
 
 
     public Thread start(){
-        Thread th = new Thread(this);
-        th.setPriority(3);
-        th.start();
-        return th;
+        this.tongbu = new Thread(this);
+        tongbu.setPriority(3);
+        tongbu.start();
+        return tongbu;
+    }
+
+    public boolean close() {
+        this.isclose = true;
+        return this.isclose;
     }
 
 
