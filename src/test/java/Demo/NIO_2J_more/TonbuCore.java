@@ -20,6 +20,10 @@ public class TonbuCore implements Runnable {
     private Thread tongbu;
     private boolean isclose;
 
+    public String getKey() {
+        return key;
+    }
+
     public TonbuCore(InetSocketAddress[] mysocketaddrs, InetSocketAddress[] othersocketaddrs, String key) {
         this.mysocketaddrs = mysocketaddrs;
         this.othersocketaddrs = othersocketaddrs;
