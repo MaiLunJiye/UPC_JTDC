@@ -83,7 +83,7 @@ public class TonbuCore implements Runnable {
                             data,
                             othersocketaddrs[othertemp]
                     );
-            System.out.println("toport>>>" + othersocketaddrs[othertemp].getPort());
+            System.out.println("toport>>>" + othersocketaddrs[othertemp].getHostName() + ":" + othersocketaddrs[othertemp].getPort());
         } catch (IOException e) {
             e.printStackTrace();
         }
