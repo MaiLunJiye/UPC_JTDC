@@ -4,7 +4,8 @@
 use utf8;
 use 5.010;
 
-my $ipbase='192.168.43.';       # 网络段
+#my $ipbase='192.168.43.';       # 网络段
+my $ipbase='192.168.31.';       # 网络段
 my $ipstart1=150;               # 第一组地址起始
 my $ipstart2=170;               # 第二组地址起始
 my $wlan0 = 'wlan0';            # 第一组网卡
