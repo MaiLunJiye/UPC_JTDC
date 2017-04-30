@@ -36,11 +36,11 @@ public class InetAddrCreater {
         };
 
         int port1_start = 7000;
-        int port1_count = 135;
+        int port1_count = 13;
         this.addr1 = new InetSocketAddress[ip1.length * port1_count];
 
         int port2_start = 7500;
-        int port2_count = 135;
+        int port2_count = 13;
         this.addr2 = new InetSocketAddress[ip2.length * port2_count];
 
 

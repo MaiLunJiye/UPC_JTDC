@@ -14,7 +14,6 @@ public class Echo_more_server {
         TonbuCore tonbuCore = new TonbuCore(ic.addr1,ic.addr2,"0");
         tonbuCore.start();
 
-
         ByteBuffer buffer = ByteBuffer.allocate(4000);
         int count = 0;
 
