@@ -106,6 +106,4 @@ public class IO_tp_client extends JPanel{
         }
     }
 
-
-
 }
