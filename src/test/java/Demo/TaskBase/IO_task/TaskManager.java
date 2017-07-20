@@ -14,13 +14,14 @@ public class TaskManager {
     public TaskManager(int size) {
         this.size = size;
         head = tail = 0;
-        ByteBuffer[] taskArray= new ByteBuffer[size];
+        this.taskArray= new ByteBuffer[size];
         for(int i = 0; i < taskArray.length; i++) {
-            taskArray[i] = ByteBuffer.allocate(70000);
+            taskArray[i] = ByteBuffer.allocate(65000);
         }
     }
 
     public void addTask(ByteBuffer buffer) {
+        buffer.flip();
         taskArray[tail].clear();
         taskArray[tail].put(buffer);
         tail = (tail + 1) % taskArray.length;

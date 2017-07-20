@@ -8,7 +8,7 @@ use 5.010;
 my $ipbase='192.168.43.';       # 网络段
 my $ipstart1=150;               # 第一组地址起始
 my $ipstart2=170;               # 第二组地址起始
-my $wlan0 = 'wlan1';            # 第一组网卡
+my $wlan0 = 'wlan0';            # 第一组网卡
 my $wlan1 = 'wlan1';            # 第二组网卡
 my $netmask = "255.255.255.0";  # 子网掩码
 my $end=9;                      # 分配数量（9 表示 分配10 个 0..9)

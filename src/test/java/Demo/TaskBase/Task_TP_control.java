@@ -27,8 +27,20 @@ public class Task_TP_control implements Transport_interface, Runnable{
     protected ReentrantReadWriteLock intasklock;
     protected ReentrantReadWriteLock outtasklock;
 
-    public Task_TP_control(DatagramChannel[] mychannels, InetSocketAddress[] aimAddress, String key) {
-        this.mychannels = mychannels;
+    public Task_TP_control(InetSocketAddress[] myaddrs, InetSocketAddress[] aimAddress, String key) {
+        DatagramChannel datagramChannel[] = new DatagramChannel[myaddrs.length];
+
+        for(int i = 0; i<myaddrs.length; i++) {
+            try {
+                datagramChannel[i] = DatagramChannel.open();
+                datagramChannel[i].configureBlocking(false);
+                datagramChannel[i].socket().bind(myaddrs[i]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        this.mychannels = datagramChannel;
         this.aimAddress = aimAddress;
         this.key = key;
         nowchannel = mychannels[0];
@@ -39,34 +51,54 @@ public class Task_TP_control implements Transport_interface, Runnable{
         outtasklock = new ReentrantReadWriteLock();
 
         optThread = new Thread(this);
+        optThread.setPriority(3);
         optThread.start();
+        System.out.println("start");
         treadClose = false;
     }
 
     public boolean writeData(ByteBuffer buffer) {
-        outtasklock.writeLock().lock();
         outputTask.addTask(buffer);
-        outtasklock.writeLock().unlock();
         return true;
     }
 
     public boolean readData(ByteBuffer buffer) {
-        intasklock.writeLock().lock();
         boolean ret = inputTask.popTask(buffer);
-        intasklock.writeLock().unlock();
         return ret;
     }
 
     public void run() {
-        int prepjvalue = CountJvalue.getvalue(key) % mychannels.length;
+        int prepjvalue = Math.abs(CountJvalue.getvalue(key) % mychannels.length);
         int now;
-        ByteBuffer buffer = ByteBuffer.allocate(70000);
+        ByteBuffer buffer = ByteBuffer.allocate(65000);
         while(!treadClose) {
-            now = CountJvalue.getvalue(key) % mychannels.length;
+            now = Math.abs(CountJvalue.getvalue(key) % mychannels.length);
             if (now != prepjvalue) {
                 nowchannel = mychannels[prepjvalue];
                 prepjvalue = now;
+                System.out.println("contine");
                 continue;
+            }
+
+            //receive
+            try {
+                buffer.clear();
+                nowchannel.receive(buffer);
+                buffer.flip();
+                inputTask.addTask(buffer);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            //send
+            buffer.clear();
+            try {
+                if (!outputTask.popTask(buffer)){
+                    nowchannel.send(buffer,aimAddress[prepjvalue % aimAddress.length]);
+                    System.out.println("send");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
             //clean next channl
@@ -79,37 +111,7 @@ public class Task_TP_control implements Transport_interface, Runnable{
                 e.printStackTrace();
             }
 
-
-            //receive
-            if(intasklock.writeLock().tryLock()){
-                try {
-                    buffer.clear();
-                    nowchannel.receive(buffer);
-                    buffer.flip();
-                    inputTask.addTask(buffer);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    intasklock.writeLock().unlock();
-                }
-            }
-
-            //send
-            buffer.clear();
-            if (outtasklock.writeLock().tryLock()) {
-                try {
-                    if (!outputTask.popTask(buffer)){
-                        nowchannel.send(buffer,aimAddress[prepjvalue]);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }finally {
-                    outtasklock.writeLock().unlock();
-                }
-            }
-
             Thread.yield();
-
         }
     }
 
