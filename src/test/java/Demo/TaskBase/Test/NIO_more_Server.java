@@ -5,13 +5,13 @@ import Demo.NIO_2J_more.TonbuCore;
 import Demo.TaskBase.Task_TP_control;
 import Transport.Transport_interface;
 import com.github.sarxos.webcam.Webcam;
+import sun.rmi.runtime.Log;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-
 
 /**
  * 思路:
@@ -38,6 +38,7 @@ public class NIO_more_Server {
         ByteArrayOutputStream os = new ByteArrayOutputStream();     //必须新建,不然那数据越变越长
         try{
             ImageIO.write(bufferedImage, "PNG", os);
+
             byte[] image_buf = os.toByteArray();
             ByteBuffer byteBuffer = ByteBuffer.wrap(image_buf);
             tonbuCore.writeData(byteBuffer);
@@ -58,8 +59,8 @@ public class NIO_more_Server {
 
 
         while(true) {
-            server.capture();
-            server.sendImage();
+            if (server.capture())
+                server.sendImage();
 
             Thread.yield();
 

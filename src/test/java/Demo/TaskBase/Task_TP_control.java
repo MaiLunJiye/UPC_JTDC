@@ -5,6 +5,7 @@ import Transport.Transport_interface;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -40,6 +41,7 @@ public class Task_TP_control implements Transport_interface, Runnable{
             }
         }
 
+
         this.mychannels = datagramChannel;
         this.aimAddress = aimAddress;
         this.key = key;
@@ -70,7 +72,7 @@ public class Task_TP_control implements Transport_interface, Runnable{
     public void run() {
         int prepjvalue = Math.abs(CountJvalue.getvalue(key) % mychannels.length);
         int now;
-        ByteBuffer buffer = ByteBuffer.allocate(65000);
+        ByteBuffer buffer = ByteBuffer.allocate(inputTask.getLimite());
         while(!treadClose) {
             now = Math.abs(CountJvalue.getvalue(key) % mychannels.length);
             if (now != prepjvalue) {
@@ -80,12 +82,23 @@ public class Task_TP_control implements Transport_interface, Runnable{
                 continue;
             }
 
+            //clean next channl
+            try {
+                buffer.clear();
+                SocketAddress sco = mychannels[now].receive(buffer);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
             //receive
             try {
                 buffer.clear();
-                nowchannel.receive(buffer);
-                buffer.flip();
-                inputTask.addTask(buffer);
+                if (nowchannel.receive(buffer) != null) {
+                    System.out.println("rec-->" + buffer);
+                    buffer.flip();
+                    inputTask.addTask(buffer);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -93,24 +106,19 @@ public class Task_TP_control implements Transport_interface, Runnable{
             //send
             buffer.clear();
             try {
-                if (!outputTask.popTask(buffer)){
+                if (outputTask.popTask(buffer)){
                     nowchannel.send(buffer,aimAddress[prepjvalue % aimAddress.length]);
-                    System.out.println("send");
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            //clean next channl
+
             try {
-                buffer.clear();
-                mychannels[now].receive(buffer);
-                buffer.clear();
-                mychannels[now].receive(buffer);
-            } catch (IOException e) {
+                Thread.sleep(20);
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
             Thread.yield();
         }
     }

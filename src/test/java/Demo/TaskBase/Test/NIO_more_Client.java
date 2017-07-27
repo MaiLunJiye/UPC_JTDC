@@ -45,7 +45,7 @@ public class NIO_more_Client extends JPanel{
         try {
             byteBuffer.clear();
             boolean rec = tonbuCore.readData(byteBuffer);            //接收 收到的数据
-            System.out.println(rec);
+//            System.out.println(rec);
             byteBuffer.flip();
             ByteArrayInputStream in = new ByteArrayInputStream(bs);     //通过流处理，转化为数据流
             bufferedImage = ImageIO.read(in);       //通过ImageIO的read方法转化为 图像

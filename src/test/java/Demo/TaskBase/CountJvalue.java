@@ -6,6 +6,6 @@ package Demo.TaskBase;
 public class CountJvalue {
     public static int getvalue(String key){
         int k = Integer.parseInt(key);
-        return (int) (System.currentTimeMillis() / 10 + k);
+        return (int) (System.currentTimeMillis() / 2000 + k);
     }
 }
