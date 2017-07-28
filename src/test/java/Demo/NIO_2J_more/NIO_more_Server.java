@@ -38,6 +38,7 @@ public class NIO_more_Server {
             ImageIO.write(bufferedImage, "PNG", os);
             byte[] image_buf = os.toByteArray();
             ByteBuffer byteBuffer = ByteBuffer.wrap(image_buf);
+            System.out.println(byteBuffer);
             tonbuCore.sendData(byteBuffer);
         } catch (IOException e) {
             e.printStackTrace();

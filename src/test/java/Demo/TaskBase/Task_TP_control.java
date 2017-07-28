@@ -81,6 +81,7 @@ public class Task_TP_control implements Transport_interface, Runnable{
                 System.out.println("contine");
                 continue;
             }
+            System.out.println(now);
 
             //clean next channl
             try {
@@ -107,6 +108,7 @@ public class Task_TP_control implements Transport_interface, Runnable{
             buffer.clear();
             try {
                 if (outputTask.popTask(buffer)){
+                    System.out.println("send->" + buffer);
                     nowchannel.send(buffer,aimAddress[prepjvalue % aimAddress.length]);
                 }
             } catch (IOException e) {

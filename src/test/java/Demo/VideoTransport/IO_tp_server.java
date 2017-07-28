@@ -85,7 +85,7 @@ public class IO_tp_server {
         server.webcam_open();           //启动摄像头
 
         //设置传输地址
-        InetSocketAddress clientaddr = new InetSocketAddress("127.0.0.1",8889);
+        InetSocketAddress clientaddr = new InetSocketAddress("192.168.43.41",8889);
 
         while (true){
             //循环发送
