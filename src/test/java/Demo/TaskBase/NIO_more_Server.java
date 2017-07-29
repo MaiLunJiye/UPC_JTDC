@@ -1,11 +1,8 @@
-package Demo.TaskBase.Test;
+package Demo.TaskBase;
 
-import Demo.NIO_2J_more.InetAddrCreater;
-import Demo.NIO_2J_more.TonbuCore;
-import Demo.TaskBase.Task_TP_control;
+import Transport.TaskBase.Task_TP_control;
 import Transport.Transport_interface;
 import com.github.sarxos.webcam.Webcam;
-import sun.rmi.runtime.Log;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
