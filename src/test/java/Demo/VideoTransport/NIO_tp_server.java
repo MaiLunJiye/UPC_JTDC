@@ -67,7 +67,7 @@ public class NIO_tp_server {
         NIO_tp_server server = new NIO_tp_server(8888);         //实例化一个server类
 
         //设置传输地址
-        InetSocketAddress clientaddr = new InetSocketAddress("127.0.0.1",8889);
+        InetSocketAddress clientaddr = new InetSocketAddress("192.168.43.153",8889);
 
         while (true){
             //循环发送

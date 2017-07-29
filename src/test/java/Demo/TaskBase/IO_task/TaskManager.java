@@ -15,7 +15,6 @@ public class TaskManager {
     protected int head,tail;
     protected ByteBuffer[] taskArray;    //循环队列
 
-    Logger logger;  //debug 输出
 
     public TaskManager(int size) {
         initTaskManager(size, __DEFAULT_LIMITE__);
@@ -38,8 +37,6 @@ public class TaskManager {
             taskArray[i] = ByteBuffer.allocate(__DEFAULT_LIMITE__);
         }
 
-        logger = Logger.getLogger("debug");
-        logger.setLevel(Level.ALL);
     }
 
     public void addTask(ByteBuffer buffer) {
@@ -55,7 +52,6 @@ public class TaskManager {
             return false;
         buffer.clear();
         taskArray[head].flip();
-        logger.info(taskArray[head].toString());
         buffer.put(taskArray[head]);
         buffer.flip();
         head = (head + 1)%taskArray.length;
