@@ -45,24 +45,31 @@ public class InetAddrCreater {
 
 
         int addrcount = 0;
-        int j=0;
-        while(j < port2_count) {
-            for(int i = 0; i < ip1.length; i++) {
+        for(int i = 0; i < ip1.length; i++) {
+            int j=0;
+            while(j < port2_count) {
                 this.addr1[addrcount] = new InetSocketAddress(ip1[i], j+port1_start);
                 addrcount++;
+                j++;
             }
-            j++;
+            System.out.println(ip1[i]);
         }
 
         addrcount = 0;
-        j=0;
-        while(j < port2_count) {
-            for(int i = 0; i < ip2.length; i++) {
+        for(int i = 0; i < ip2.length; i++) {
+            int j=0;
+            while(j < port2_count) {
                 this.addr2[addrcount] = new InetSocketAddress(ip2[i], j+port2_start);
                 addrcount++;
+                j++;
             }
-            j++;
         }
 
+    }
+
+    public static void main(String[] args) {
+        InetAddrCreater ic = new InetAddrCreater();
+        for(int i = 0; i <= ic.addr1.length; i++)
+            System.out.println(ic.addr2[i]);
     }
 }

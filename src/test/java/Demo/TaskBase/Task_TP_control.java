@@ -78,10 +78,8 @@ public class Task_TP_control implements Transport_interface, Runnable{
             if (now != prepjvalue) {
                 nowchannel = mychannels[prepjvalue];
                 prepjvalue = now;
-                System.out.println("contine");
-                continue;
             }
-            System.out.println(now);
+            //System.out.println(now);
 
             //clean next channl
             try {
@@ -93,6 +91,11 @@ public class Task_TP_control implements Transport_interface, Runnable{
 
 
             //receive
+            now = Math.abs(CountJvalue.getvalue(key) % mychannels.length);
+            if (now != prepjvalue) {
+                nowchannel = mychannels[prepjvalue];
+                prepjvalue = now;
+            }
             try {
                 buffer.clear();
                 if (nowchannel.receive(buffer) != null) {
@@ -105,10 +108,15 @@ public class Task_TP_control implements Transport_interface, Runnable{
             }
 
             //send
+            now = Math.abs(CountJvalue.getvalue(key) % mychannels.length);
+            if (now != prepjvalue) {
+                nowchannel = mychannels[prepjvalue];
+                prepjvalue = now;
+            }
             buffer.clear();
             try {
                 if (outputTask.popTask(buffer)){
-                    System.out.println("send->" + buffer);
+                    System.out.println("send:" + nowchannel.getLocalAddress());
                     nowchannel.send(buffer,aimAddress[prepjvalue % aimAddress.length]);
                 }
             } catch (IOException e) {
