@@ -6,7 +6,8 @@ import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamImageTransformer;
 import com.github.sarxos.webcam.WebcamUtils;
 
-public class Webcam_basic implements Cammer_inderface {
+//这里帮你新建了一个你自己决定的接口函数  不然编译失败
+public class Webcam_basic implements Cammer_int_new {
 	    Webcam webcam = Webcam.getDefault();
 	
 	public BufferedImage getimageData(BufferedImage image){
