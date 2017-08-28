@@ -20,8 +20,8 @@ my $netmask = "255.255.255.0";    # 子网掩码
 my $index   = 0;
 for my $ip ( @{ $jsonObj->{$ipgroup} } ) {
     system("ifconfig $dev:$index $ip netmask $netmask up");
-    say $ip;
     $index++;
+    say $ip;
 }
 
 #system("ifconfig $dev:$index $ip netmask $netmask up");
