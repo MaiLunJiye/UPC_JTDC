@@ -118,6 +118,7 @@ public class Task_TP_control implements Transport_interface, Runnable{
                 if (outputTask.popTask(buffer)){
                     System.out.println("send:" + nowchannel.getLocalAddress());
                     nowchannel.send(buffer,aimAddress[prepjvalue % aimAddress.length]);
+
                 }
             } catch (IOException e) {
                 e.printStackTrace();

@@ -13,7 +13,7 @@ given ($ipgroup) {
     default {die "error input ipstart";}
 };
 
-my $ipbase='192.168.43.';       # 网络段
+my $ipbase='192.168.31.';       # 网络段
 my $netmask = "255.255.255.0";  # 子网掩码
 my $end=9;                      # 分配数量（9 表示 分配10 个 0..9)
 
