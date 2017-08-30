@@ -1,6 +1,16 @@
 package Demo.TaskBase;
 
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.Iterator;
 
 /**
  * Created by simqin on 4/8/17.
@@ -8,68 +18,72 @@ import java.net.InetSocketAddress;
 public class InetAddrCreater {
     public InetSocketAddress[] addr1;
     public InetSocketAddress[] addr2;
-    public InetAddrCreater(){
-        String[] ip1 = {
-                "192.168.43.150",
-                "192.168.43.151",
-                "192.168.43.152",
-                "192.168.43.153",
-                "192.168.43.154",
-                "192.168.43.155",
-                "192.168.43.156",
-                "192.168.43.157",
-                "192.168.43.158",
-                "192.168.43.159",
-        };
 
-        String[] ip2 = {
-                "192.168.43.170",
-                "192.168.43.171",
-                "192.168.43.172",
-                "192.168.43.173",
-                "192.168.43.174",
-                "192.168.43.175",
-                "192.168.43.176",
-                "192.168.43.177",
-                "192.168.43.178",
-                "192.168.43.179",
-        };
+    public InetAddrCreater(String confPath) {
 
-        int port1_start = 7000;
-        int port1_count = 100;
-        this.addr1 = new InetSocketAddress[ip1.length * port1_count];
-
-        int port2_start = 7500;
-        int port2_count = 100;
-        this.addr2 = new InetSocketAddress[ip2.length * port2_count];
+        JSONParser parser = new JSONParser();
+        try {
+            Object obj = parser.parse(new FileReader(confPath));
+            JSONObject jsonObject = (JSONObject) obj;
+            System.out.println(jsonObject);
+            JSONArray ip1 = (JSONArray) jsonObject.get("ip1");
+            JSONArray ip2 = (JSONArray) jsonObject.get("ip2");
 
 
-        int addrcount = 0;
-        for(int i = 0; i < ip1.length; i++) {
-            int j=0;
-            while(j < port2_count) {
-                this.addr1[addrcount] = new InetSocketAddress(ip1[i], j+port1_start);
-                addrcount++;
-                j++;
+//        String[] ip1 = { };
+//        String[] ip2 = { };
+
+            int port1_start = 7000;
+            int port1_count = 100;
+            this.addr1 = new InetSocketAddress[ip1.size() * port1_count];
+
+            int port2_start = 7500;
+            int port2_count = 100;
+            this.addr2 = new InetSocketAddress[ip2.size() * port2_count];
+
+
+            Iterator<String> ip1Iterator = ip1.iterator();
+            Iterator<String> ip2Iterator = ip2.iterator();
+            int addrcount = 0;
+            while(ip1Iterator.hasNext()) {
+                int j = 0;
+                String nowIP = ip1Iterator.next();
+                while (j < port2_count) {
+                    this.addr1[addrcount] = new InetSocketAddress(nowIP, j + port1_start);
+                    addrcount++;
+                    j++;
+                }
+                System.out.println(nowIP);
             }
-            System.out.println(ip1[i]);
-        }
 
-        addrcount = 0;
-        for(int i = 0; i < ip2.length; i++) {
-            int j=0;
-            while(j < port2_count) {
-                this.addr2[addrcount] = new InetSocketAddress(ip2[i], j+port2_start);
-                addrcount++;
-                j++;
+            addrcount = 0;
+            while(ip2Iterator.hasNext()) {
+                int j = 0;
+                String nowIP = ip2Iterator.next();
+                while (j < port2_count) {
+                    this.addr2[addrcount] = new InetSocketAddress(nowIP, j + port1_start);
+                    addrcount++;
+                    j++;
+                }
+                System.out.println(nowIP);
             }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
     }
 
     public static void main(String[] args) {
-        InetAddrCreater ic = new InetAddrCreater();
-        for(int i = 0; i <= ic.addr1.length; i++)
+        InetAddrCreater ic = new InetAddrCreater("./iplist.json");
+        for(int i = 0; i < ic.addr2.length; i++)
             System.out.println(ic.addr2[i]);
+
+        for(int i = 0; i < ic.addr1.length; i++)
+            System.out.println(ic.addr1[i]);
     }
 }
