@@ -6,6 +6,6 @@ package Transport.TaskBase;
 public class CountJvalue {
     public static int getvalue(String key){
         int k = Integer.parseInt(key);
-        return (int) (System.currentTimeMillis() / 1000 + k);
+        return (int) (System.currentTimeMillis() / 10000 + k);
     }
 }

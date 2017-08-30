@@ -50,7 +50,7 @@ public class NIO_more_Server {
 
     public static void main(String[] args) {
 
-        InetAddrCreater ic = new InetAddrCreater();
+        InetAddrCreater ic = new InetAddrCreater("./config/iplist.json");
         Task_TP_control tonbuCore = new Task_TP_control(ic.addr2, ic.addr1, "0");
         NIO_more_Server server = new NIO_more_Server(tonbuCore);
 
