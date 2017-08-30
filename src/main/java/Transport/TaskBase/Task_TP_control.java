@@ -71,20 +71,21 @@ public class Task_TP_control implements Transport_interface, Runnable{
 
     public void run() {
         int prepjvalue = Math.abs(CountJvalue.getvalue(key) % mychannels.length);
+        int aimAddrIndex = prepjvalue;
         int now;
         ByteBuffer buffer = ByteBuffer.allocate(inputTask.getLimite());
         while(!treadClose) {
             now = Math.abs(CountJvalue.getvalue(key) % mychannels.length);
             if (now != prepjvalue) {
                 nowchannel = mychannels[prepjvalue];
+                aimAddrIndex = prepjvalue;
                 prepjvalue = now;
             }
             //System.out.println(now);
-
             //clean next channl
             try {
                 buffer.clear();
-                SocketAddress sco = mychannels[now].receive(buffer);
+                mychannels[now].receive(buffer);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -94,6 +95,7 @@ public class Task_TP_control implements Transport_interface, Runnable{
             now = Math.abs(CountJvalue.getvalue(key) % mychannels.length);
             if (now != prepjvalue) {
                 nowchannel = mychannels[prepjvalue];
+                aimAddrIndex = prepjvalue;
                 prepjvalue = now;
             }
             try {
@@ -107,17 +109,18 @@ public class Task_TP_control implements Transport_interface, Runnable{
                 e.printStackTrace();
             }
 
-            //send
+            //send 发送
             now = Math.abs(CountJvalue.getvalue(key) % mychannels.length);
             if (now != prepjvalue) {
                 nowchannel = mychannels[prepjvalue];
+                aimAddrIndex = prepjvalue;
                 prepjvalue = now;
             }
             buffer.clear();
             try {
                 if (outputTask.popTask(buffer)){
                     System.out.println("send:" + nowchannel.getLocalAddress());
-                    nowchannel.send(buffer,aimAddress[prepjvalue % aimAddress.length]);
+                    nowchannel.send(buffer,aimAddress[aimAddrIndex % aimAddress.length]);
 
                 }
             } catch (IOException e) {
