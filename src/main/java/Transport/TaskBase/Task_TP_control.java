@@ -16,7 +16,10 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class Task_TP_control implements Transport_interface, Runnable{
     protected DatagramChannel mychannels[];
     protected InetSocketAddress aimAddress[];
-    protected String key;
+
+    protected String mykey;
+    protected String aimkey;
+
     protected DatagramChannel nowchannel;
 
     protected TaskManager outputTask;
@@ -28,7 +31,7 @@ public class Task_TP_control implements Transport_interface, Runnable{
     protected ReentrantReadWriteLock intasklock;
     protected ReentrantReadWriteLock outtasklock;
 
-    public Task_TP_control(InetSocketAddress[] myaddrs, InetSocketAddress[] aimAddress, String key) {
+    public Task_TP_control(InetSocketAddress[] myaddrs, InetSocketAddress[] aimAddress, String mykey, String aimkey) {
         DatagramChannel datagramChannel[] = new DatagramChannel[myaddrs.length];
 
         for(int i = 0; i<myaddrs.length; i++) {
@@ -44,7 +47,9 @@ public class Task_TP_control implements Transport_interface, Runnable{
 
         this.mychannels = datagramChannel;
         this.aimAddress = aimAddress;
-        this.key = key;
+        this.mykey = mykey;
+        this.aimkey = aimkey;
+
         nowchannel = mychannels[0];
         outputTask = new TaskManager(TaskManager.__DEFAULT_MAX_SIZE__);
         inputTask = new TaskManager(TaskManager.__DEFAULT_MAX_SIZE__);
@@ -69,39 +74,18 @@ public class Task_TP_control implements Transport_interface, Runnable{
         return ret;
     }
 
+
     public void run() {
-        int prepjvalue = Math.abs(CountJvalue.getvalue(key) % mychannels.length);
-        int aimAddrIndex = prepjvalue;
-        int now;
         ByteBuffer buffer = ByteBuffer.allocate(inputTask.getLimite());
+        InetSocketAddress sendTo = null;
+        SocketAddress dataSource = null;
         while(!treadClose) {
-            now = Math.abs(CountJvalue.getvalue(key) % mychannels.length);
-            if (now != prepjvalue) {
-                nowchannel = mychannels[prepjvalue];
-                aimAddrIndex = prepjvalue;
-                prepjvalue = now;
-            }
-            //System.out.println(now);
-            //clean next channl
+            nowchannel = mychannels[ CountJvalue.getvalue(mykey) % mychannels.length ];
             try {
                 buffer.clear();
-                mychannels[now].receive(buffer);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-
-            //receive
-            now = Math.abs(CountJvalue.getvalue(key) % mychannels.length);
-            if (now != prepjvalue) {
-                nowchannel = mychannels[prepjvalue];
-                aimAddrIndex = prepjvalue;
-                prepjvalue = now;
-            }
-            try {
-                buffer.clear();
-                if (nowchannel.receive(buffer) != null) {
-                    System.out.println("rec-->" + buffer);
+                dataSource = nowchannel.receive(buffer);
+                if (dataSource != null) {
+                    System.out.println(nowchannel.getLocalAddress() + " rec <--" + dataSource + " : " + buffer);
                     buffer.flip();
                     inputTask.addTask(buffer);
                 }
@@ -110,29 +94,24 @@ public class Task_TP_control implements Transport_interface, Runnable{
             }
 
             //send 发送
-            now = Math.abs(CountJvalue.getvalue(key) % mychannels.length);
-            if (now != prepjvalue) {
-                nowchannel = mychannels[prepjvalue];
-                aimAddrIndex = prepjvalue;
-                prepjvalue = now;
-            }
+            nowchannel = mychannels[ CountJvalue.getvalue(mykey) % mychannels.length ];
             buffer.clear();
             try {
                 if (outputTask.popTask(buffer)){
-                    System.out.println("send:" + nowchannel.getLocalAddress());
-                    nowchannel.send(buffer,aimAddress[aimAddrIndex % aimAddress.length]);
-
+                    sendTo = aimAddress[CountJvalue.getvalue(aimkey) % aimAddress.length];
+                    System.out.println("send:" + nowchannel.getLocalAddress() + "-->" + sendTo);
+                    nowchannel.send(buffer,sendTo);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
 
-            try {
-                Thread.sleep(20);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                Thread.sleep(20);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
             Thread.yield();
         }
     }

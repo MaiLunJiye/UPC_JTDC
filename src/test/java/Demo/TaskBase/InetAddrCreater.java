@@ -79,7 +79,7 @@ public class InetAddrCreater {
     }
 
     public static void main(String[] args) {
-        InetAddrCreater ic = new InetAddrCreater("./iplist.json");
+        InetAddrCreater ic = new InetAddrCreater("./iplist_MP.json");
         for(int i = 0; i < ic.addr2.length; i++)
             System.out.println(ic.addr2[i]);
 
