@@ -10,7 +10,6 @@ public class CountJvalue {
         int SystemTime = (int) (System.currentTimeMillis() / 100);
         String source = String.valueOf(SystemTime);
         source += key;
-        System.out.println(source);
 
         java.security.MessageDigest md = null;
         try {

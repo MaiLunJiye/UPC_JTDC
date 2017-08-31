@@ -77,12 +77,15 @@ public class Task_TP_control implements Transport_interface, Runnable{
 
     public void run() {
         ByteBuffer buffer = ByteBuffer.allocate(inputTask.getLimite());
+        InetSocketAddress sendTo = null;
+        SocketAddress dataSource = null;
         while(!treadClose) {
             nowchannel = mychannels[ CountJvalue.getvalue(mykey) % mychannels.length ];
             try {
                 buffer.clear();
-                if (nowchannel.receive(buffer) != null) {
-                    System.out.println("rec-->" + buffer);
+                dataSource = nowchannel.receive(buffer);
+                if (dataSource != null) {
+                    System.out.println(nowchannel.getLocalAddress() + " rec <--" + dataSource + " : " + buffer);
                     buffer.flip();
                     inputTask.addTask(buffer);
                 }
@@ -95,9 +98,9 @@ public class Task_TP_control implements Transport_interface, Runnable{
             buffer.clear();
             try {
                 if (outputTask.popTask(buffer)){
-//                    System.out.println("send:" + nowchannel.getLocalAddress()
-//                         + "-->" + aimAddress[Math.abs(CountJvalue.getvalue(aimkey) % aimAddress.length)]);
-                    nowchannel.send(buffer,aimAddress[CountJvalue.getvalue(aimkey) % aimAddress.length]);
+                    sendTo = aimAddress[CountJvalue.getvalue(aimkey) % aimAddress.length];
+                    System.out.println("send:" + nowchannel.getLocalAddress() + "-->" + sendTo);
+                    nowchannel.send(buffer,sendTo);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
