@@ -79,8 +79,31 @@ public class Task_TP_control implements Transport_interface, Runnable{
         ByteBuffer buffer = ByteBuffer.allocate(inputTask.getLimite());
         InetSocketAddress sendTo = null;
         SocketAddress dataSource = null;
+
+        int MyPrepJumpValue = 0;
+        int AimPrepJumpValue = 0;
+
+        int MyNowJumpValue = 0;
+        int AimNowJumpValue = 0;
+
+        int tmpJumpValue = 0;
+
         while(!treadClose) {
-            nowchannel = mychannels[ CountJvalue.getvalue(mykey) % mychannels.length ];
+
+            //============== receive =================
+            tmpJumpValue = CountJvalue.getvalue(mykey);
+            if (tmpJumpValue != MyNowJumpValue) {
+                MyPrepJumpValue = MyNowJumpValue;
+                MyNowJumpValue = tmpJumpValue;
+            }
+
+            tmpJumpValue = CountJvalue.getvalue(aimkey);
+            if (tmpJumpValue != AimNowJumpValue) {
+                AimPrepJumpValue = AimNowJumpValue;
+                AimNowJumpValue = tmpJumpValue;
+            }
+
+            nowchannel = mychannels[MyPrepJumpValue % mychannels.length];
             try {
                 buffer.clear();
                 dataSource = nowchannel.receive(buffer);
@@ -93,15 +116,47 @@ public class Task_TP_control implements Transport_interface, Runnable{
                 e.printStackTrace();
             }
 
-            //send 发送
-            nowchannel = mychannels[ CountJvalue.getvalue(mykey) % mychannels.length ];
+            //=================send 发送====================
+            tmpJumpValue = CountJvalue.getvalue(mykey);
+            if (tmpJumpValue != MyNowJumpValue) {
+                MyPrepJumpValue = MyNowJumpValue;
+                MyNowJumpValue = tmpJumpValue;
+            }
+            tmpJumpValue = CountJvalue.getvalue(aimkey);
+            if (tmpJumpValue != AimNowJumpValue) {
+                AimPrepJumpValue = AimNowJumpValue;
+                AimNowJumpValue = tmpJumpValue;
+            }
+            nowchannel = mychannels[MyPrepJumpValue % mychannels.length];
+
             buffer.clear();
             try {
                 if (outputTask.popTask(buffer)){
-                    sendTo = aimAddress[CountJvalue.getvalue(aimkey) % aimAddress.length];
+                    sendTo = aimAddress[AimPrepJumpValue % aimAddress.length];
                     System.out.println("send:" + nowchannel.getLocalAddress() + "-->" + sendTo);
                     nowchannel.send(buffer,sendTo);
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            //================clean======================
+            tmpJumpValue = CountJvalue.getvalue(mykey);
+            if (tmpJumpValue != MyNowJumpValue) {
+                MyPrepJumpValue = MyNowJumpValue;
+                MyNowJumpValue = tmpJumpValue;
+            }
+            tmpJumpValue = CountJvalue.getvalue(aimkey);
+            if (tmpJumpValue != AimNowJumpValue) {
+                AimPrepJumpValue = AimNowJumpValue;
+                AimNowJumpValue = tmpJumpValue;
+            }
+
+            try {
+                buffer.clear();
+                mychannels[MyNowJumpValue % mychannels.length].receive(buffer);
+                buffer.clear();
+                mychannels[MyNowJumpValue % mychannels.length].receive(buffer);
             } catch (IOException e) {
                 e.printStackTrace();
             }
