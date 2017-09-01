@@ -7,7 +7,7 @@ import java.security.NoSuchAlgorithmException;
  */
 public class CountJvalue {
     public static int getvalue(String key) {
-        int SystemTime = (int) (System.currentTimeMillis() / 125);
+        int SystemTime = (int) (System.currentTimeMillis() / 100);
         String source = String.valueOf(SystemTime);
         source += key;
 
