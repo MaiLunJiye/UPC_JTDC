@@ -51,7 +51,7 @@ public class NIO_more_Server {
     public static void main(String[] args) {
 
         InetAddrCreater ic = new InetAddrCreater("./config/iplist_MP.json");
-        Task_TP_control tonbuCore = new Task_TP_control(ic.addr1, ic.addr2, "ServerKey", "ClientKey");
+        Task_TP_control tonbuCore = new Task_TP_control(ic.serverIps, ic.clientIps, "ServerKey", "ClientKey");
         NIO_more_Server server = new NIO_more_Server(tonbuCore);
 
 

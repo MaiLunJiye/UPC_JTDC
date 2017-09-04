@@ -1,5 +1,7 @@
 package Transport.TaskBase;
 
+import Transport.JumpValueCounter.CanCountJumpValue;
+import Transport.JumpValueCounter.JVCounterBySysTime;
 import Transport.TaskBase.IO_task.TaskManager;
 import Transport.Transport_interface;
 
@@ -19,6 +21,8 @@ public class Task_TP_control implements Transport_interface, Runnable{
 
     protected String mykey;
     protected String aimkey;
+    protected CanCountJumpValue jumpValueCounter = new JVCounterBySysTime();
+
 
     protected DatagramChannel nowchannel;
 
@@ -64,17 +68,24 @@ public class Task_TP_control implements Transport_interface, Runnable{
         treadClose = false;
     }
 
+    public void setJumpValueCounter(CanCountJumpValue jumpValueCounter) {
+        this.jumpValueCounter = jumpValueCounter;
+    }
+
+    @Override
     public boolean writeData(ByteBuffer buffer) {
         outputTask.addTask(buffer);
         return true;
     }
 
+    @Override
     public boolean readData(ByteBuffer buffer) {
         boolean ret = inputTask.popTask(buffer);
         return ret;
     }
 
 
+    @Override
     public void run() {
         ByteBuffer buffer = ByteBuffer.allocate(inputTask.getLimite());
         InetSocketAddress sendTo = null;
@@ -91,13 +102,13 @@ public class Task_TP_control implements Transport_interface, Runnable{
         while(!treadClose) {
 
             //============== receive =================
-            tmpJumpValue = CountJvalue.getvalue(mykey);
+            tmpJumpValue = jumpValueCounter.countJumpValue(mykey);
             if (tmpJumpValue != MyNowJumpValue) {
                 MyPrepJumpValue = MyNowJumpValue;
                 MyNowJumpValue = tmpJumpValue;
             }
 
-            tmpJumpValue = CountJvalue.getvalue(aimkey);
+            tmpJumpValue = jumpValueCounter.countJumpValue(aimkey);
             if (tmpJumpValue != AimNowJumpValue) {
                 AimPrepJumpValue = AimNowJumpValue;
                 AimNowJumpValue = tmpJumpValue;
@@ -117,12 +128,12 @@ public class Task_TP_control implements Transport_interface, Runnable{
             }
 
             //=================send 发送====================
-            tmpJumpValue = CountJvalue.getvalue(mykey);
+            tmpJumpValue = jumpValueCounter.countJumpValue(mykey);
             if (tmpJumpValue != MyNowJumpValue) {
                 MyPrepJumpValue = MyNowJumpValue;
                 MyNowJumpValue = tmpJumpValue;
             }
-            tmpJumpValue = CountJvalue.getvalue(aimkey);
+            tmpJumpValue = jumpValueCounter.countJumpValue(aimkey);
             if (tmpJumpValue != AimNowJumpValue) {
                 AimPrepJumpValue = AimNowJumpValue;
                 AimNowJumpValue = tmpJumpValue;
@@ -141,12 +152,12 @@ public class Task_TP_control implements Transport_interface, Runnable{
             }
 
             //================clean======================
-            tmpJumpValue = CountJvalue.getvalue(mykey);
+            tmpJumpValue = jumpValueCounter.countJumpValue(mykey);
             if (tmpJumpValue != MyNowJumpValue) {
                 MyPrepJumpValue = MyNowJumpValue;
                 MyNowJumpValue = tmpJumpValue;
             }
-            tmpJumpValue = CountJvalue.getvalue(aimkey);
+            tmpJumpValue = jumpValueCounter.countJumpValue(aimkey);
             if (tmpJumpValue != AimNowJumpValue) {
                 AimPrepJumpValue = AimNowJumpValue;
                 AimNowJumpValue = tmpJumpValue;
