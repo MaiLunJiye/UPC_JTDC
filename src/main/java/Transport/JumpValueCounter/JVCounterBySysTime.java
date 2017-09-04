@@ -1,13 +1,20 @@
-package Transport.TaskBase;
+package Transport.JumpValueCounter;
 
 import java.security.NoSuchAlgorithmException;
 
 /**
  * Created by honghem on 6/19/17.
  */
-public class CountJvalue {
-    public static int getvalue(String key) {
-        int SystemTime = (int) (System.currentTimeMillis() / 100);
+public class JVCounterBySysTime implements CanCountJumpValue{
+    protected int JumpCycle = 100;
+
+    public void setJumpCycle(int jumpCycle) {
+        JumpCycle = jumpCycle;
+    }
+
+    @Override
+    public int countJumpValue(String key) {
+        int SystemTime = (int) (System.currentTimeMillis() / JumpCycle);
         String source = String.valueOf(SystemTime);
         source += key;
 
@@ -34,7 +41,8 @@ public class CountJvalue {
 
     public static void main(String[] args) throws InterruptedException, NoSuchAlgorithmException {
         while (true) {
-            System.out.println(getvalue("的;aksdj"));
+            JVCounterBySysTime jvc = new JVCounterBySysTime();
+            System.out.println(jvc.countJumpValue("testKey"));
             Thread.sleep(100);
         }
     }

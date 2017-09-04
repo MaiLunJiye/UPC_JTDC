@@ -66,7 +66,7 @@ public class NIO_more_Client extends JPanel{
 
     public static void main(String[] args) {
         InetAddrCreater ic = new InetAddrCreater("./config/iplist_MP.json");
-        Transport_interface tongbuCore = new Task_TP_control(ic.addr1, ic.addr2, "ClientKey", "ServerKey");
+        Transport_interface tongbuCore = new Task_TP_control(ic.clientIps, ic.serverIps, "ClientKey", "ServerKey");
         NIO_more_Client client = new NIO_more_Client(tongbuCore);
 
 
