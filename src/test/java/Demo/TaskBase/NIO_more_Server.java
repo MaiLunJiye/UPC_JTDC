@@ -3,6 +3,7 @@ package Demo.TaskBase;
 import Transport.TaskBase.Task_TP_control;
 import Transport.Transport_interface;
 import com.github.sarxos.webcam.Webcam;
+import com.github.sarxos.webcam.WebcamUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -33,15 +34,8 @@ public class NIO_more_Server {
 
     public void sendImage(){
         ByteArrayOutputStream os = new ByteArrayOutputStream();     //必须新建,不然那数据越变越长
-        try{
-            ImageIO.write(bufferedImage, "PNG", os);
-
-            byte[] image_buf = os.toByteArray();
-            ByteBuffer byteBuffer = ByteBuffer.wrap(image_buf);
-            tonbuCore.writeData(byteBuffer);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        ByteBuffer byteBuffer = WebcamUtils.getImageByteBuffer(webcam, "jpg");
+        tonbuCore.writeData(byteBuffer);
     }
 
     public Transport_interface getTonbuCore() {
