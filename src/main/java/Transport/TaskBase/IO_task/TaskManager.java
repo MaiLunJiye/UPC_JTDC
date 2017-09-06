@@ -41,7 +41,12 @@ public class TaskManager {
 
     public void addTask(ByteBuffer buffer) {
         taskArray[tail].clear();
-        taskArray[tail].put(buffer);
+        try {
+            taskArray[tail].put(buffer);
+        } catch ( Exception e) {
+            System.out.println("buffer too big = [" + buffer + "]");
+            return;
+        }
         tail = (tail + 1) % taskArray.length;
         if ( head == tail)
             head = (head + 1) % taskArray.length;
