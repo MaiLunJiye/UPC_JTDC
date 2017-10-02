@@ -6,6 +6,7 @@ import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamUtils;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -23,6 +24,7 @@ public class NIO_more_Server {
 
     public NIO_more_Server(Transport_interface tonbuCore){
         webcam = Webcam.getDefault();
+        webcam.setViewSize(new Dimension(640,480));
         webcam.open();
         this.tonbuCore = tonbuCore;
     }
