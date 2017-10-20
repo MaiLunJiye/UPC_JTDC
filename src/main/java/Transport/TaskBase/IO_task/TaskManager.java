@@ -44,7 +44,7 @@ public class TaskManager {
         try {
             taskArray[tail].put(buffer);
         } catch ( Exception e) {
-            System.out.println("buffer too big = [" + buffer + "]");
+            System.err.println("buffer too big = [" + buffer + "]");
             return;
         }
         tail = (tail + 1) % taskArray.length;
