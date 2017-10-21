@@ -4,10 +4,13 @@ import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * Created by honghem on 6/10/17.
- */
 public class TaskManager {
+    /**
+     　* 消息队列管理类,用于管理消息队列
+       *    每个消息管理类里面都有两个消息队列,一个用于发,一个用于收
+     　* @ClassName：TaskManager
+     　*/
+
     public static int __DEFAULT_LIMITE__ = 65400;
     public static int __DEFAULT_MAX_SIZE__ = 10;
     protected int size;

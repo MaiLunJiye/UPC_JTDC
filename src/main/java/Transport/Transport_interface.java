@@ -7,6 +7,10 @@ import java.nio.ByteBuffer;
 
 
 public interface Transport_interface {
+    /**
+     　* 传输接口, 提供外部程序对跳变模块的IO调用借口
+     　* @ClassName：Transport_interface
+     　*/
 
     /**
      * 把缓冲区数据写入消息队列

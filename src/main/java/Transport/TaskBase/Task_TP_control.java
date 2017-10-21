@@ -13,6 +13,11 @@ import java.nio.channels.DatagramChannel;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class Task_TP_control implements Transport_interface, Runnable{
+    /**
+     　* 基于事件的跳变控制类,是外部程序调用跳变模块的入口的实现
+     　* @ClassName：Task_TP_control
+     　*/
+
     protected DatagramChannel mychannels[];
     protected InetSocketAddress aimAddress[];
 
