@@ -1,4 +1,3 @@
-DOC/
 tags
 .swp
 target/
@@ -9,3 +8,7 @@ UPC_Dachuang.iml
 DOC/
 
 tags
+
+META-INF/
+
+out/artifacts/UPC_Dachuang_jar/

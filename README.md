@@ -1,4 +1,4 @@
-# Demo 使用说明 
+﻿# Demo 使用说明 
  
 ## 文件说明 
  
@@ -51,13 +51,19 @@ Demo/TaskBase/
  
 然后根据上面的地址为 对应服务器, 客户机申请地址(windows 直接添加) 
  
-如果使用 `Linux` 系统,可以执行`SetipPerl.pl`脚本 快速申请ip地址 
+如果使用 `Linux` 系统,可以执行`SetipPerl.pl` 或 `SetipPy.py` 脚本 快速申请ip地址 
+
+> 若使用perl脚本初始化环境出现模块依赖问题，可以使用 python3脚本
  
 ```$xslt 
 sudo perl SetipPerl.pl 配置文件所路径   网卡   类型[server | client] 
  
 sudo perl SetipPerl.pl iplist_MP.json wlan0 server  # 给服务器初始化地址 
 sudo perl SetipPerl.pl iplist_MP.json wlan1 client  # 给客户机初始化地址 
+
+sudo python3 SetipPy.pl 配置文件所路径   网卡   类型[server | client] 
+sudo python3 SetipPy.pl iplist_MP.json wlan0 server  # 给服务器初始化地址 
+sudo python3 SetipPy.pl iplist_MP.json wlan1 client  # 给客户机初始化地址 
 ``` 
  
 然后双方通过时间服务器同步一下时间, `Linux` 系统可以使用如下命令 

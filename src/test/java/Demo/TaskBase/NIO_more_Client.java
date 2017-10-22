@@ -72,7 +72,7 @@ public class NIO_more_Client extends JPanel{
 
         //新建一个画板，并且初始化
         JFrame w = new JFrame();
-        w.setSize(200,200);
+        w.setSize(640,480);
 
         //把 wclient 添加到画板上面，并且让画板的属性设置成可见
         w.add(client);

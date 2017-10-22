@@ -2,12 +2,14 @@ package Transport.JumpValueCounter;
 
 import java.security.NoSuchAlgorithmException;
 
-/**
- * Created by honghem on 6/19/17.
- */
+
 public class JVCounterBySysTime implements CanCountJumpValue{
     protected int JumpCycle = 100;
 
+    /**
+     * 修改跳变周期
+     * @param jumpCycle 跳变周期(ms)
+     */
     public void setJumpCycle(int jumpCycle) {
         JumpCycle = jumpCycle;
     }
@@ -31,6 +33,7 @@ public class JVCounterBySysTime implements CanCountJumpValue{
         byte[] src = md.digest();
         int offset = 0;
 
+        //bit[] to in
         int retvalue = (int) ((src[offset] & 0xFF)
                 | ((src[offset+1] & 0xFF)<<8)
                 | ((src[offset+2] & 0xFF)<<16)
@@ -39,11 +42,4 @@ public class JVCounterBySysTime implements CanCountJumpValue{
         return  Math.abs(retvalue);
     }
 
-    public static void main(String[] args) throws InterruptedException, NoSuchAlgorithmException {
-        while (true) {
-            JVCounterBySysTime jvc = new JVCounterBySysTime();
-            System.out.println(jvc.countJumpValue("testKey"));
-            Thread.sleep(100);
-        }
-    }
 }
