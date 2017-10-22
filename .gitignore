@@ -1,4 +1,3 @@
-DOC/
 tags
 .swp
 target/
@@ -10,3 +9,7 @@ word_record.md
 tags
 .swp
 .ycm_extra_conf.py
+
+META-INF/
+
+out/artifacts/UPC_Dachuang_jar/
