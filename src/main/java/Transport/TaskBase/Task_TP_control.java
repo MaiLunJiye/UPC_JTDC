@@ -12,10 +12,12 @@ import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-/**
- * Created by honghem on 6/10/17.
- */
 public class Task_TP_control implements Transport_interface, Runnable{
+    /**
+     　* 基于事件的跳变控制类,是外部程序调用跳变模块的入口的实现
+     　* @ClassName：Task_TP_control
+     　*/
+
     protected DatagramChannel mychannels[];
     protected InetSocketAddress aimAddress[];
 
@@ -35,6 +37,14 @@ public class Task_TP_control implements Transport_interface, Runnable{
     protected ReentrantReadWriteLock intasklock;
     protected ReentrantReadWriteLock outtasklock;
 
+    /**
+     * 构造函数
+     *      双方的IP地址簇顺序敏感
+     * @param myaddrs 我的可用跳变IP地址簇
+     * @param aimAddress 目标的可用跳变IP地址簇
+     * @param mykey 我放的Key
+     * @param aimkey 目标的Key
+     */
     public Task_TP_control(InetSocketAddress[] myaddrs, InetSocketAddress[] aimAddress, String mykey, String aimkey) {
         DatagramChannel datagramChannel[] = new DatagramChannel[myaddrs.length];
 
@@ -68,6 +78,10 @@ public class Task_TP_control implements Transport_interface, Runnable{
         treadClose = false;
     }
 
+    /**
+     * 自定义同步值生成器
+     * @param jumpValueCounter 同步值生成器
+     */
     public void setJumpValueCounter(CanCountJumpValue jumpValueCounter) {
         this.jumpValueCounter = jumpValueCounter;
     }

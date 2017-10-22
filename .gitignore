@@ -3,9 +3,12 @@ tags
 target/
 .idea/
 hello-world.png
-word_record.md
-*.iml
+*.so
+UPC_Dachuang.iml
+DOC/
 
 tags
-.swp
-.ycm_extra_conf.py
+
+META-INF/
+
+out/artifacts/UPC_Dachuang_jar/

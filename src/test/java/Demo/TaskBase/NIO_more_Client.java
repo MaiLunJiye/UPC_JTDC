@@ -65,14 +65,14 @@ public class NIO_more_Client extends JPanel{
     }
 
     public static void main(String[] args) {
-        InetAddrCreater ic = new InetAddrCreater("./config/iplist_MP.json");
+        InetAddrCreater ic = new InetAddrCreater("./config/iplist_lalala.json");
         Transport_interface tongbuCore = new Task_TP_control(ic.clientIps, ic.serverIps, "ClientKey", "ServerKey");
         NIO_more_Client client = new NIO_more_Client(tongbuCore);
 
 
         //新建一个画板，并且初始化
         JFrame w = new JFrame();
-        w.setSize(200,200);
+        w.setSize(640,480);
 
         //把 wclient 添加到画板上面，并且让画板的属性设置成可见
         w.add(client);
